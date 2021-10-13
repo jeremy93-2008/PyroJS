@@ -1,0 +1,18 @@
+{
+  "name": "pyro-default-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "pyrojs build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react": "^17.0.29",
+    "pyrojs": "file:../..",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
