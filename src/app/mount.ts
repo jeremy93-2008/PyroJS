@@ -1,11 +1,11 @@
-import {IPyroComponent, IPyroElement} from "../typing/pyro.typing";
-import {createFnElement} from "../element/element";
+import {IHTMLPyroRootElement, IPyroComponent, IPyroElement} from "../typing/pyro.typing";
+import {rootComponent} from "./component";
 
-export function mount(pyroComponent: IPyroComponent<{}>, rootNodes: HTMLElement) {
-    const nodes = renderPyroComponent(createFnElement(pyroComponent))
+export function mount(pyroComponent: IPyroComponent<{}>, rootNode: IHTMLPyroRootElement) {
+    const nodes = renderPyroComponent(rootComponent(pyroComponent, rootNode))
     console.log(nodes.outerHTML)
-    rootNodes.innerHTML = ""
-    rootNodes.appendChild(nodes)
+    rootNode.innerHTML = ""
+    rootNode.appendChild(nodes)
 }
 
 function renderPyroComponent(pyroComponent: IPyroElement<any>): HTMLElement {
