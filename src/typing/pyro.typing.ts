@@ -24,7 +24,7 @@ export interface IPyroComputed<T> {
 }
 
 export interface IPyroSubscribers {
-    fn: Function
+    fn: Function | IPyroElement<any>
     type?: "html" | "effect" | "atom" | "memo" | "callback"
 }
 
@@ -43,7 +43,7 @@ export interface IPyroComponentContextState {
     memos: IPyroComputed<any>[],
     callback: IPyroComputed<any>[],
     currentInstance?: {
-        fn: Function,
+        fn: Function | IPyroElement<any>,
         type: "html" | "effect" | "atom" | "memo" | "callback"
     }
 }

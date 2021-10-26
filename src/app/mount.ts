@@ -1,14 +1,15 @@
 import {IHTMLPyroRootElement, IPyroComponent, IPyroElement} from "../typing/pyro.typing";
 import {rootComponent} from "./component";
+import {getRootContext} from "./context";
 
 export function mount(pyroComponent: IPyroComponent<{}>, rootNode: IHTMLPyroRootElement) {
-    const nodes = renderPyroComponent(rootComponent(pyroComponent, rootNode))
-    console.log(nodes.outerHTML)
+    const pyroElement = renderPyroComponent(rootComponent(pyroComponent, rootNode))
+    const a = getRootContext()
     rootNode.innerHTML = ""
-    rootNode.appendChild(nodes)
+    rootNode.appendChild(pyroElement.node!)
 }
 
-function renderPyroComponent(pyroComponent: IPyroElement<any>): HTMLElement {
+function renderPyroComponent(pyroComponent: IPyroElement<any>): IPyroElement<any> {
     if(typeof pyroComponent.type === "function") {
         if(!pyroComponent.children || Array.isArray(pyroComponent.children))
             throw new Error("Need a single root element 🔥🔥🔥")
@@ -23,15 +24,15 @@ function renderPyroComponent(pyroComponent: IPyroElement<any>): HTMLElement {
 
     if(!pyroComponent.children) {
         if(pyroComponent.value) node.innerHTML = pyroComponent.value
-        return pyroComponent.node
+        return pyroComponent
     }
 
     const children = Array.isArray(pyroComponent.children) ? pyroComponent.children : [pyroComponent.children]
 
     children.forEach(child => {
-        const childNode = renderPyroComponent(child)
-        pyroComponent.node!.appendChild(childNode)
+        const element = renderPyroComponent(child)
+        pyroComponent.node!.appendChild(element.node!)
     })
 
-    return pyroComponent.node
+    return pyroComponent
 }

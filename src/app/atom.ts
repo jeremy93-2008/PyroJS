@@ -38,5 +38,5 @@ const setData = function <T>(s: IPyroAtom<T>, value: T) {
     s.value = value
     const currentAtom = currentContext.state.atoms.find(at => at.idx === s.idx)
     if(!currentAtom) return
-    currentAtom.subscribers.forEach(sub => sub.fn())
+    currentAtom.subscribers.forEach(sub => typeof sub.fn === "function" ? sub.fn() : {})
 }

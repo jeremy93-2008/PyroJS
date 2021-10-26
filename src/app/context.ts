@@ -1,23 +1,23 @@
-import {IPyroComponent, IPyroComponentContext} from "../typing/pyro.typing";
+import {IPyroComponent, IPyroComponentContext, IPyroElement} from "../typing/pyro.typing";
 import {element} from "../element/element";
 
-export let ComponentContext: IPyroComponentContext = createContext()
-export let currentContext: IPyroComponentContext = ComponentContext
+export let __rootContext: IPyroComponentContext = createContext()
+export let __currentContext: IPyroComponentContext = __rootContext
 
 export function setCurrentContext (ctx: IPyroComponentContext) {
-    currentContext = ctx
+    __currentContext = ctx
 }
 
 export function setRootContext (ctx: IPyroComponentContext) {
-    ComponentContext = ctx
+    __rootContext = ctx
 }
 
 export function getCurrentContext () {
-    return currentContext
+    return __currentContext
 }
 
 export function getRootContext() {
-    return ComponentContext
+    return __rootContext
 }
 
 export function createContext(fn?: IPyroComponent<any>, props?: any): IPyroComponentContext {
@@ -44,4 +44,15 @@ export function createNewIndexes() {
         callback: 0,
         component: 0
     }
+}
+
+export function setNewCurrentInstance(fn: Function | IPyroElement<any>, type: "html" | "effect" | "atom" | "memo" | "callback") {
+    const currentContext = getCurrentContext()
+    currentContext.state.currentInstance = { fn, type }
+    return { fn, type }
+}
+
+export function cleanCurrentInstance() {
+    const currentContext = getCurrentContext()
+    currentContext.state.currentInstance = undefined
 }

@@ -14,11 +14,7 @@ export function rootComponent(pyroComponent: IPyroComponent<{}>, rootNode?: IHTM
     setRootContext(rootNode?.__pyroComponentState || createContext(pyroComponent))
     setCurrentContext(getRootContext())
     rootNode.__pyroComponentState = getRootContext()
-    setRootContext(createNewRootContext(pyroComponent))
-    console.log(getRootContext())
-    setCurrentContext(getRootContext())
     const rootChildren = pyroComponent({})
-    setRootContext(createNewRootContext(pyroComponent))
     setCurrentContext(getRootContext())
     return element(pyroComponent, {}, rootChildren)
 }
@@ -48,17 +44,4 @@ function executePyroComponent(currentComponent: IPyroComponentContext, pyroCompo
     const pyroElements = pyroComponent(props || {})
     setCurrentContext(currentComponent.owner as IPyroComponentContext)
     return pyroElements;
-}
-
-function createNewRootContext(pyroComponent: IPyroComponent<{}>) {
-    return { ...getRootContext(),
-        indexes: createNewIndexes(),
-        state: {
-            ...getRootContext().state,
-            currentInstance: {
-                fn: pyroComponent,
-                type: "html"
-            }
-        }
-    } as IPyroComponentContext
 }

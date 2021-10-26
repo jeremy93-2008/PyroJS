@@ -18,7 +18,7 @@ describe("Pyro Component", () => {
                 element("div", {},
                     element("span",{title: "Buenas"},[
                         element("span",{},"Buenas al mundo"),
-                        element("span",{}, getData())
+                        element("span",{}, getData)
                     ])
                 ),
                 element("div",{},
