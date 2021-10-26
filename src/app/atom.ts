@@ -1,19 +1,42 @@
 import {IPyroAtom, IPyroSubscribers} from "../typing/pyro.typing";
 import {getCurrentContext, getRootContext} from "./context";
 
-export function createAtom<T>(this: any, initialValue: T): [() => T, Function] {
+export function createAtom<T>(initialValue: T): [() => T, Function] {
+    const currentContext = getCurrentContext()
     const s = {
+        idx: currentContext.indexes.atom,
         subscribers: [] as IPyroSubscribers[],
         value: initialValue
     }
-    console.log("current", getCurrentContext() ,"root", getRootContext())
-    return [() => getData<T>(s), setData.bind(s as any)]
+    currentContext.indexes.atom++
+    return [() => getData<T>(s), (value: T) => setData(s, value)]
 }
 
 const getData = function <T>(s: IPyroAtom<T>): T {
-    return s.value as T
+    const currentContext = getCurrentContext()
+    if(!currentContext.state.currentInstance) throw new Error("Atom Get Function need to be in a Pyro Component 🔥🔥🔥")
+
+    let currentAtomSubscribers = currentContext.state.atoms.find(atom => atom.idx === s.idx)
+    if(!currentAtomSubscribers) {
+        currentContext.state.atoms.push(s)
+        currentAtomSubscribers = s
+    }
+
+    if(!(currentAtomSubscribers.subscribers.find(subscriber => subscriber.fn
+        === currentContext.state.currentInstance!.fn))) {
+        currentAtomSubscribers.subscribers.push({
+            fn: currentContext.state.currentInstance.fn,
+            type: currentContext.state.currentInstance.type
+        })
+    }
+
+    return currentAtomSubscribers.value as T
 }
 
-const setData = function <T>(this: IPyroAtom<T>) {
-
+const setData = function <T>(s: IPyroAtom<T>, value: T) {
+    const currentContext = getCurrentContext()
+    s.value = value
+    const currentAtom = currentContext.state.atoms.find(at => at.idx === s.idx)
+    if(!currentAtom) return
+    currentAtom.subscribers.forEach(sub => sub.fn())
 }

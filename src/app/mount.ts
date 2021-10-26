@@ -11,7 +11,7 @@ export function mount(pyroComponent: IPyroComponent<{}>, rootNode: IHTMLPyroRoot
 function renderPyroComponent(pyroComponent: IPyroElement<any>): HTMLElement {
     if(typeof pyroComponent.type === "function") {
         if(!pyroComponent.children || Array.isArray(pyroComponent.children))
-            throw new Error("Need a single root element.")
+            throw new Error("Need a single root element 🔥🔥🔥")
         return renderPyroComponent(pyroComponent.children)
     }
 

@@ -12,11 +12,13 @@ export interface IPyroElement<T> {
 }
 
 export interface IPyroAtom<T> {
+    idx: number
     value: T
     subscribers: IPyroSubscribers[]
 }
 
 export interface IPyroComputed<T> {
+    idx: number,
     fn: T,
     subscribers: IPyroSubscribers[]
 }
@@ -40,6 +42,10 @@ export interface IPyroComponentContextState {
     effects: IPyroComputed<any>[],
     memos: IPyroComputed<any>[],
     callback: IPyroComputed<any>[],
+    currentInstance?: {
+        fn: Function,
+        type: "html" | "effect" | "atom" | "memo" | "callback"
+    }
 }
 
 export interface IPyroComponentIndexes {
